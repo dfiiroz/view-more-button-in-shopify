@@ -1,0 +1,68 @@
+<style>
+  //Custom CSS
+  .load-more_wrap{
+   margin-top: 60px; 
+   text-align: center;
+  }
+  .load-more_wrap img{
+   max-width: 25px;
+  }
+  div.pagination{
+   display: none !important;
+  }
+</style>
+
+
+{%- if paginate.pages > 1 -%}
+    <input type="hidden" value="{{ paginate.next.url }}" data-next-link>
+     <input type="hidden" value="{{ paginate.pages }}" data-all-pages>
+     <input type="hidden" value="{{ paginate.current_page }}" data-this-page>
+     <input type="hidden" value="{{ collection.url }}" data-coll-url>
+     <div class="load-more_wrap">
+     <button class="btn js-load-more btn--primary hero__btn">
+     <span load-more-text>View More</span>
+     <span class="hide" loader>
+     <img src="{{ 'loader.gif' | asset_url }}"/>
+     </span>
+     </button>
+     </div> 
+
+    {%- render "pagination" with paginate as paginate -%}
+{%- endif -%}
+
+
+
+<script>
+$('.js-load-more').on('click', function(){
+ var $this =$(this),
+ totalPages = parseInt($('[data-all-pages]').val()),
+ currentPage = parseInt($('[data-this-page]').val()),
+ datacollurl = $('[data-coll-url]').val();;
+ $this.attr('disabled', true);
+ $this.find('[load-more-text]').addClass('hide');
+ $this.find('[loader]').removeClass('hide');
+ var nextUrl = $('[data-next-link]').val();
+ var current_page_new = currentPage + 1;
+ var next_coll = currentPage + 2;
+ //alert(current_page_new)
+ //return false;
+ $.ajax({
+ url: nextUrl,
+ type: 'GET',
+ dataType: 'html',
+ success: function(responseHTML){
+ $('[data-next-link]').val(datacollurl + "?page="+next_coll);
+ $('[data-this-page]').val(current_page_new);
+ $('.ADD CLASS OF THE PRODUCT PAGE').append($(responseHTML).find('.ADD CLASS OF THE PRODUCT PAGE').html());
+ },
+ complete: function() {
+ if(current_page_new < totalPages) {
+ $this.attr('disabled', false); $this.find('[load-more-text]').removeClass('hide'); $this.find('[loader]').addClass('hide');
+ } 
+ if(current_page_new >= totalPages) {
+ $this.find('[load-more-text]').text('No More Products Left').removeClass('hide'); $this.find('[loader]').addClass('hide');
+ } 
+ }
+ })
+});
+</script>
