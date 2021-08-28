@@ -1,18 +1,3 @@
-<style>
-  //Custom CSS
-  .load-more_wrap{
-   margin-top: 60px; 
-   text-align: center;
-  }
-  .load-more_wrap img{
-   max-width: 25px;
-  }
-  div.pagination{
-   display: none !important;
-  }
-</style>
-
-
 {%- if paginate.pages > 1 -%}
     <input type="hidden" value="{{ paginate.next.url }}" data-next-link>
      <input type="hidden" value="{{ paginate.pages }}" data-all-pages>
@@ -30,6 +15,21 @@
     {%- render "pagination" with paginate as paginate -%}
 {%- endif -%}
 
+
+  
+<style>
+
+  .load-more_wrap{
+   margin-top: 60px; 
+   text-align: center;
+  }
+  .load-more_wrap img{
+   max-width: 25px;
+  }
+  div.pagination{
+   display: none !important;
+  }
+</style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>
@@ -53,7 +53,7 @@ $('.js-load-more').on('click', function(){
  success: function(responseHTML){
  $('[data-next-link]').val(datacollurl + "?page="+next_coll);
  $('[data-this-page]').val(current_page_new);
- $('.ADD CLASS OF THE PRODUCT PAGE').append($(responseHTML).find('.ADD CLASS OF THE PRODUCT PAGE').html());
+ $('.grid-loader').append($(responseHTML).find('.grid-loader').html());
  },
  complete: function() {
  if(current_page_new < totalPages) {
@@ -66,5 +66,3 @@ $('.js-load-more').on('click', function(){
  })
 });
 </script>
-
-
